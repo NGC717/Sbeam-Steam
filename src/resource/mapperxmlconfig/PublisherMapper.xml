@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sbeam.mapper.PublisherMapper">
+
+    <resultMap id="publisherMap" type="Publisher">
+        <id property="pId" column="p_id"/>
+        <result property="pName" column="p_name"/>
+        <result property="pBank" column="p_bank"/>
+        <result property="pOfficeName" column="p_office_name"/>
+        <result property="pOfficeLocation" column="p_office_location"/>
+        <result property="pOfficeCountry" column="p_office_country"/>
+        <result property="pTele" column="p_tele"/>
+        <result property="pIncome" column="p_income"/>
+        <result property="pIsPass" column="p_is_pass"/>
+        <result property="uId" column="u_id"/>
+    </resultMap>
+
+    <resultMap id="developerMap" type="Developer">
+        <id property="dId" column="d_id"/>
+        <result property="dName" column="d_name"/>
+        <result property="pId" column="p_id"/>
+    </resultMap>
+
+    <insert id="insertPublisher">
+        INSERT INTO
+            t_publisher
+        VALUES
+            (null,#{pName},#{pBank},#{pOfficeName},#{pOfficeLocation},#{pOfficeCountry},#{pTele},0,0,#{uId})
+    </insert>
+    <insert id="insertLowDeviceConfiguration">
+        INSERT INTO
+            t_low_device_config
+        VALUES
+            (null,#{lOperationSystem},#{lCpu},#{lRam},#{lGpu},#{lDirectx},#{lRom},#{gId})
+    </insert>
+
+    <insert id="insertRecommendDeviceConfiguration">
+        INSERT INTO
+            t_recommend_device_config
+        VALUES
+        (null,#{rOperationSystem},#{rCpu},#{rRam},#{rGpu},#{rDirectx},#{rRom},#{gId})
+    </insert>
+
+    <insert id="insertDeveloper" keyProperty="dId" useGeneratedKeys="true">
+        INSERT INTO
+            t_developer
+        VALUES
+            (null,#{dName},#{pId})
+    </insert>
+
+    <delete id="deleteDeveloperByDeveloperId">
+        DELETE FROM t_developer WHERE d_id = #{dId}
+    </delete>
+
+    <select id="selectPublisherByUserId" resultMap="publisherMap">
+        SELECT
+            p_id,p_name,p_bank,p_office_name,p_office_location,
+            p_office_country,p_income,p_is_pass,u_id
+        FROM
+             t_publisher
+        WHERE
+            u_id = #{uId}
+    </select>
+
+    <select id="selectDeveloperByPublisherId" resultMap="developerMap">
+        SELECT d_id,d_name,p_id FROM t_developer WHERE p_id = #{pId}
+    </select>
+
+    <select id="selectDeveloperByDeveloperName" resultMap="developerMap">
+        SELECT d_id,d_name,p_id FROM t_developer WHERE d_name = #{dName}
+    </select>
+    <select id="selectAllPublishersWaitForPass" resultMap="publisherMap">
+        SELECT
+            p_id,p_name,p_bank,p_office_name,p_office_location,
+            p_office_country,p_tele,p_income,p_is_pass,u_id
+        FROM
+            t_publisher
+        WHERE
+            p_is_pass = 0
+        LIMIT 10
+    </select>
+
+</mapper>

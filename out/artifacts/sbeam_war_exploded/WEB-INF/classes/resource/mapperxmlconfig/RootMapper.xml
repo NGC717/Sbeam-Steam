@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sbeam.mapper.RootMapper">
+    <update id="updatePublisherIsPass">
+        UPDATE t_publisher SET p_is_pass = 1
+    </update>
+    <update id="updateGameIsCheck">
+        UPDATE t_game SET g_is_check = 1 WHERE g_id = #{gId}
+    </update>
+    <delete id="deletePublisherNotPass">
+        DELETE FROM t_publisher WHERE p_id = #{pId}
+    </delete>
+    <delete id="deleteGame">
+        DELETE FROM t_game WHERE g_id = #{gId}
+    </delete>
+    <select id="selectRootByPwd" resultType="java.lang.Integer">
+        SELECT r_id FROM t_root WHERE r_password = #{rootPwd}
+    </select>
+</mapper>

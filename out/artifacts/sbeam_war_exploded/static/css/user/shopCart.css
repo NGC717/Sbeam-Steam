@@ -1,0 +1,56 @@
+body{
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    background-image: url("/static/img/user/background_spotlight.jpg");
+    background-size: cover;
+}
+
+h2{
+    color: aliceblue;
+}
+
+h4{
+    color: aliceblue;
+}
+
+#navigationBar{
+    position: absolute;
+    left: 20%;
+    top: 20%;
+    background-color: #2E9AFE;
+    width: 820px;
+    height: 30px;
+    display: flex;
+    font-weight: bold;
+}
+
+button{
+    background-color: transparent;
+    border-color: transparent;
+    color: aliceblue;
+}
+
+#search{
+    position: absolute;
+    left:500px;
+    top: 0px;
+    margin-left: 146px;
+}
+
+#search_btn{
+    position: absolute;
+    top: 0px;
+    width: 30px;
+    height: 30px;
+    border-color: transparent;
+    background-image: url("/static/img/user/search_icon_btn.png");
+}
+
+#search_input{
+    border-color: transparent;
+    height: 30px;
+    background-color: #0080FF;
+    font-weight: bold;
+    color: aliceblue;
+}

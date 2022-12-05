@@ -1,0 +1,46 @@
+body{
+    margin: 0 0;
+    padding: 0;
+    background-color:#1b6588;
+}
+
+#navigationBar{
+    position: absolute;
+    left: 20%;
+    top: 20%;
+    background-color: rgba(167, 187, 205, 0.65);
+    width: 820px;
+    height: 30px;
+    display: flex;
+    font-weight: bold;
+}
+
+button{
+    background-color: transparent;
+    border-color: transparent;
+    color: aliceblue;
+}
+
+#search{
+    position: absolute;
+    left:500px;
+    top: 0px;
+    margin-left: 146px;
+}
+
+#search_btn{
+    position: absolute;
+    top: 0px;
+    width: 30px;
+    height: 30px;
+    border-color: transparent;
+    background-image: url("/static/img/user/search_icon_btn.png");
+}
+
+#search_input{
+    border-color: transparent;
+    height: 30px;
+    background-color: #0080FF;
+    font-weight: bold;
+    color: aliceblue;
+}

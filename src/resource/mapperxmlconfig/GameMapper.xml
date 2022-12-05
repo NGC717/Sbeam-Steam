@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sbeam.mapper.GameMapper">
+
+    <resultMap id="PromotionMap" type="PromotionGame">
+        <id property="id" column="id"/>
+        <result property="gTotal" column="total"/>
+        <result property="gPrice" column="price"/>
+        <result property="gBeginTime" column="begin_time"/>
+        <result property="gId" column="g_id"/>
+        <result property="gName" column="g_name"/>
+    </resultMap>
+
+    <resultMap id="GameMap" type="Game">
+        <id property="gId" column="g_id"/>
+        <result property="gName" column="g_name"/>
+        <result property="gPrice" column="g_price"/>
+        <result property="gUploadTime" column="g_upload_time"/>
+        <result property="gDownloadNum" column="g_download_num"/>
+        <result property="gIsPublish" column="g_is_publish"/>
+        <result property="gIsRemove" column="g_is_remove"/>
+        <result property="gIsComplete" column="g_is_complete"/>
+        <result property="gIsCheck" column="g_is_check"/>
+        <association property="developer" column="d_id" javaType="Developer" resultMap="DeveloperMap"/>
+        <association property="publisher" column="p_id" javaType="Publisher" resultMap="PublisherMap"/>
+        <association property="category" column="c_id" javaType="Category" resultMap="CategoryMap"/>
+    </resultMap>
+
+    <resultMap id="DeveloperMap" type="Developer">
+        <id property="dId" column="d_id"/>
+        <result property="dName" column="d_name"/>
+        <result property="pId" column="p_id"/>
+    </resultMap>
+
+    <resultMap id="PublisherMap" type="Publisher">
+        <id property="pId" column="p_id"/>
+        <result property="pName" column="p_name"/>
+    </resultMap>
+
+    <resultMap id="CategoryMap" type="Category">
+        <id property="cId" column="c_id"/>
+        <result property="cCategory" column="c_category"/>
+    </resultMap>
+
+    <resultMap id="IntroduceMap" type="IntroduceGame">
+        <id property="iId" column="ig_id"/>
+        <result property="iContent" column="ig_content"/>
+        <result property="gId" column="g_id"/>
+    </resultMap>
+
+    <resultMap id="LowDeviceConfigMap" type="LowDeviceConfiguration">
+        <id property="lId" column="ldc_id"/>
+        <result property="lOperationSystem" column="ldc_os"/>
+        <result property="lCpu" column="ldc_cpu"/>
+        <result property="lRam" column="ldc_ram"/>
+        <result property="lGpu" column="ldc_gpu"/>
+        <result property="lDirectx" column="ldc_directx"/>
+        <result property="lRom" column="ldc_rom"/>
+        <result property="gId" column="g_id"/>
+    </resultMap>
+
+    <resultMap id="RecommendDeviceConfigMap" type="RecommendDeviceConfiguration">
+        <id property="rId" column="rdc_id"/>
+        <result property="rOperationSystem" column="rdc_os"/>
+        <result property="rCpu" column="rdc_cpu"/>
+        <result property="rRam" column="rdc_ram"/>
+        <result property="rGpu" column="rdc_gpu"/>
+        <result property="rDirectx" column="rdc_directx"/>
+        <result property="rRom" column="rdc_rom"/>
+        <result property="gId" column="g_id"/>
+    </resultMap>
+
+    <insert id="insertGame" keyProperty="gId" useGeneratedKeys="true">
+        INSERT INTO
+            t_game
+        VALUES
+        (null,#{gName},#{gPrice},null,0,0,0,0,0,#{pId},#{dId},#{cId})
+    </insert>
+    <insert id="insertIntroduceGame">
+        INSERT INTO
+            t_introduce_game
+        VALUES
+            (null,#{iContent},#{gId})
+    </insert>
+    <insert id="insertPromotion">
+        INSERT INTO
+            t_promotion
+        VALUES
+            (null ,#{gTotal},#{gPrice},#{gBeginTime},#{gId})
+    </insert>
+    <update id="updateGameIsCompleteByGameId">
+        UPDATE
+            t_game
+        SET
+            g_is_complete = 1
+        WHERE
+            g_id = #{gId}
+    </update>
+    <update id="updateIntroduceGame">
+        UPDATE
+            t_introduce_game
+        SET
+            ig_content = #{iContent}
+        WHERE
+            g_id = #{gId}
+    </update>
+    <update id="updateGameIsNotPublishByGId">
+        UPDATE t_game SET g_is_publish = 0 WHERE g_id = #{gId}
+    </update>
+    <update id="updateGameIsPublishByGId">
+        UPDATE t_game SET g_is_publish = 1 WHERE g_id = #{gId}
+    </update>
+    <delete id="deleteGameByGId">
+        DELETE FROM t_game WHERE g_id = #{gId}
+    </delete>
+    <select id="selectAllGamesByPublisherId" resultMap="GameMap">
+        SELECT
+            g_id,g_name,g_price,g_upload_time,g_download_num,
+            g_is_publish,g_is_remove,g_is_complete,
+            g_is_check,d.d_id,d.d_name,d.p_id
+        FROM
+            t_game g LEFT JOIN t_developer d ON g.d_id = d.d_id
+        WHERE
+            g.p_id = #{pId}
+        ORDER BY
+            g_download_num
+                DESC
+    </select>
+    <select id="selectGamesOrderByDownloadNum" resultMap="GameMap">
+        SELECT
+            g_id,g_name,g_price,g_upload_time,g_download_num,
+            g_is_publish,g_is_remove,g_is_complete,
+            g_is_check,d.d_id,d.d_name,d.p_id
+        FROM
+            t_game g LEFT JOIN t_developer d ON g.d_id = d.d_id
+        ORDER BY
+            g_download_num
+                DESC
+            LIMIT 7;
+    </select>
+    <select id="selectGamesOrderByUploadTime" resultMap="GameMap">
+        SELECT
+            g_id,g_name,g_price,g_upload_time,g_download_num,
+            g_is_publish,g_is_remove,g_is_complete,
+            g_is_check,d.d_id,d.d_name,d.p_id
+        FROM
+            t_game g LEFT JOIN t_developer d ON g.d_id = d.d_id
+        ORDER BY
+            g_upload_time
+    </select>
+    <select id="selectGameIntroduceByGameId" resultMap="IntroduceMap">
+        SELECT
+            ig_id,ig_content,g_id
+        FROM
+            t_introduce_game
+        WHERE
+            g_id = #{gid}
+    </select>
+    <select id="selectGameByGameId" resultMap="GameMap">
+        SELECT
+            g_id,g_name,g_price,g_upload_time,g_download_num,
+            g_is_publish,g_is_remove,g_is_complete,
+            g_is_check,c.c_id,c_category,d.d_id,d.d_name,d.p_id,p.p_id,p_name
+        FROM
+            t_game g LEFT JOIN t_developer d ON g.d_id = d.d_id LEFT JOIN t_publisher p ON g.p_id = p.p_id LEFT JOIN t_category c ON g.c_id = c.c_id
+        WHERE
+            g_id = #{gId}
+    </select>
+    <select id="selectLowDeviceConfigurationByGameId" resultMap="LowDeviceConfigMap">
+        SELECT
+            ldc_id, ldc_os, ldc_cpu, ldc_ram, ldc_gpu, ldc_directx, ldc_rom, g_id
+        FROM
+            t_low_device_config
+        WHERE
+            g_id= #{gId}
+    </select>
+    <select id="selectRecommendDeviceConfigurationByGameId"
+            resultMap="RecommendDeviceConfigMap">
+        SELECT
+            rdc_id, rdc_os, rdc_cpu, rdc_ram, rdc_gpu, rdc_directx, rdc_rom, g_id
+        FROM
+            t_recommend_device_config
+        WHERE
+            g_id = #{gId}
+    </select>
+
+    <select id="selectAllGamesIsPublish" resultMap="GameMap">
+        SELECT
+            g_id,g_name,g_price,c_category
+        FROM
+            t_game g LEFT JOIN t_category c ON g.c_id = c.c_id
+        WHERE
+            g_is_publish = 1
+        ORDER BY
+            g_download_num
+                DESC
+            LIMIT 10
+    </select>
+    <select id="selectGameByGameIdFromInventory" resultMap="GameMap">
+        SELECT
+            i_id, u_id, g_id, buy_time
+        FROM
+            t_inventory
+        WHERE
+            g_id = #{param1} AND u_id = #{param2}
+    </select>
+    <select id="selectAllGamesPage" resultMap="GameMap">
+        SELECT
+            g_id,g_name,g_price,c_category
+        FROM
+            t_game g LEFT JOIN t_category c ON g.c_id = c.c_id
+        WHERE
+            g_is_publish = 1
+        ORDER BY
+            g_download_num
+                DESC
+            LIMIT #{offset},#{limit}
+    </select>
+    <select id="getTotalCountIsPublish" resultType="java.lang.Integer">
+        SELECT COUNT(g_id) FROM t_game WHERE g_is_publish = 1
+    </select>
+
+    <select id="selectGameByName" resultMap="GameMap">
+        SELECT
+            g.g_id,g.g_name,g.g_price,c.c_id,c.c_category
+        FROM
+            t_game g LEFT JOIN t_category c ON g.c_id = c.c_id
+        WHERE
+            g_is_publish = 1
+          AND
+            g_name LIKE CONCAT('%',#{gName},'%')
+            LIMIT 7
+    </select>
+    <select id="selectGameByCategoryId" resultMap="GameMap">
+        SELECT
+            g_id,g_name,g_price,c_category
+        FROM
+            t_game g LEFT JOIN t_category c ON g.c_id = c.c_id
+        WHERE
+            g_is_publish = 1 AND g.c_id = #{param1}
+        ORDER BY
+            g_download_num
+                DESC
+            LIMIT #{param2.offset},#{param2.limit}
+    </select>
+    <select id="selectGamesByCategory" resultMap="GameMap">
+        SELECT
+            g_id,g_name,g_price,c_category
+        FROM
+            t_game g LEFT JOIN t_category c ON g.c_id = c.c_id
+        WHERE
+            g.c_id = #{param2}
+        ORDER BY
+            g_download_num
+            LIMIT 8
+    </select>
+    <select id="selectAllGamesWaitForCheck" resultMap="GameMap">
+        SELECT
+            g_id,g_name,g_price,g_upload_time,g_download_num,
+            g_is_publish,g_is_remove,g_is_complete,
+            g_is_check,c.c_id,c_category,d.d_id,d.d_name,d.p_id,p.p_id,p_name
+        FROM
+            t_game g LEFT JOIN t_developer d ON g.d_id = d.d_id LEFT JOIN t_publisher p ON g.p_id = p.p_id LEFT JOIN t_category c ON g.c_id = c.c_id
+        WHERE
+            g_is_check = 0
+        ORDER BY
+            g_upload_time
+            LIMIT 10
+    </select>
+    <select id="selectPromotionGame" resultMap="PromotionMap">
+        SELECT
+            id,p.g_id,total,price,begin_time,g_name
+        FROM
+            t_promotion p LEFT JOIN t_game g ON p.g_id = g.g_id
+    </select>
+    <select id="selectNameByGId" resultType="java.lang.String">
+        SELECT g_name FROM t_game WHERE g_id = #{gId}
+    </select>
+    <select id="selectGameByUserIdWithGameId" resultType="java.lang.Integer">
+        SELECT
+                g_id
+        FROM
+                t_inventory
+        WHERE
+                u_id = #{param1} AND g_id = #{param2}
+    </select>
+
+</mapper>

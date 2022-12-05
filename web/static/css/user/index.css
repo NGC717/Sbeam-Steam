@@ -1,0 +1,128 @@
+
+body{
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    background-image: url("/static/img/user/background_spotlight.jpg");
+    background-size: cover;
+}
+
+#navigationBar{
+    position: absolute;
+    left: 20%;
+    top: 20%;
+    background-color: #2E9AFE;
+    width: 820px;
+    height: 30px;
+    display: flex;
+    font-weight: bold;
+}
+
+button{
+    background-color: transparent;
+    border-color: transparent;
+    color: aliceblue;
+}
+
+#search{
+   position: absolute;
+    left:500px;
+    top: 0px;
+    margin-left: 146px;
+}
+
+#search_btn{
+    position: absolute;
+    top: 0px;
+    width: 30px;
+    height: 30px;
+    border-color: transparent;
+    background-image: url("/static/img/user/search_icon_btn.png");
+}
+
+#search_input{
+    border-color: transparent;
+    height: 30px;
+    background-color: #0080FF;
+    font-weight: bold;
+    color: aliceblue;
+}
+
+#choice_recommend{
+   position: absolute;
+    left: 20%;
+    top: 28%;
+}
+
+.new_game{
+    background-color: #2E9AFE;
+}
+
+tr {
+    display: block;
+    margin: 2px 0;
+}
+
+button{
+    background-color: #2E9AFE;
+    border-color: #2E9AFE;
+}
+
+.price_div{
+    float: left;
+    background-color: #1e3040;
+    width: 85px;
+    height: 90px;
+    margin-left: 0px;
+    padding: 30px;
+}
+
+.name_div{
+    float: left;
+    background-color: #1e3040;
+    width: 350px;
+    height: 90px;
+    margin-left: 0px;
+    padding: 10px;
+}
+
+.name_div:hover~.price_div{
+    background-color: #a7cbe0;
+}
+
+.name_div:hover{
+    background-color: #a7cbe0;
+}
+
+a {
+    color: aliceblue;
+    text-decoration: none;
+}
+
+
+tr {
+    display: block;
+    margin: 2px 0;
+}
+
+button{
+    background-color: #2E9AFE;
+    border-color: #2E9AFE;
+}
+
+.name_div{
+    float: left;
+    background-color: #1e3040;
+    width: 350px;
+    height: 90px;
+    margin-left: 0px;
+    padding: 10px;
+}
+
+.name_div:hover~.price_div{
+    background-color: #a7cbe0;
+}
+
+.name_div:hover{
+    background-color: #a7cbe0;
+}

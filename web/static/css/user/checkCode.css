@@ -1,0 +1,62 @@
+body{
+    background-color: #292c33;
+}
+
+#title{
+    position: absolute;
+    left: 400px;
+    top: 50px;
+    margin: 0 auto;
+    color: aliceblue;
+    font-size: 45px;
+    font-weight: initial;
+}
+
+#checkCode{
+    width: 500px;
+    height: 200px;
+    background-color: #1f2126;
+    position: absolute;
+    left: 400px;
+    top: 150px;
+}
+
+#info{
+    margin: 10px auto;
+    color: aliceblue;
+    position: absolute;
+    left: 30px;
+    top: 10px;
+}
+
+label{
+    color: aliceblue;
+}
+
+form{
+    position: absolute;
+    left: 30px;
+    top: 100px;
+}
+h4{
+    color: aliceblue;
+}
+
+h5{
+    color: aliceblue;
+}
+
+#error{
+    position: absolute;
+    left: 400px;
+    top: 350px;
+    width: 500px;
+}
+
+#res{
+    color: red;
+    font-size: 20px;
+    position: absolute;
+    left: 90px;
+    top: 150px;
+}

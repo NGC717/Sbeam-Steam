@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sbeam.mapper.UserMapper">
+
+    <resultMap id="UserMap" type="User">
+        <id property="uId" column="u_id"/>
+        <result property="uName" column="u_name"/>
+        <result property="uPassword" column="u_password"/>
+        <result property="uCreatTime" column="u_creat_time"/>
+        <result property="uCountry" column="u_country"/>
+        <result property="uEmail" column="u_email"/>
+        <result property="uBalance" column="u_balance"/>
+        <association property="comment" resultMap="CommentMap"/>
+    </resultMap>
+
+    <resultMap id="CartMap" type="Cart">
+        <id property="carId" column="car_id"/>
+        <result property="gId" column="g_id"/>
+        <result property="uId" column="u_id"/>
+        <result property="creatTime" column="creat_time"/>
+        <association property="game" resultMap="GameMap"/>
+    </resultMap>
+    <resultMap id="GameMap" type="Game">
+        <id property="gId" column="g_id"/>
+        <result property="gName" column="g_name"/>
+        <result property="gPrice" column="g_price"/>
+    </resultMap>
+
+    <resultMap id="CommentMap1" type="Comment">
+        <id property="gcId" column="gc_id"/>
+        <result property="gcContent" column="gc_content"/>
+        <result property="gcIsGood" column="gc_is_good"/>
+        <result property="gcTime" column="gc_time"/>
+    </resultMap>
+
+    <resultMap id="CommentMap" type="Comment">
+        <id property="gcId" column="gc_id"/>
+        <result property="gcContent" column="gc_content"/>
+        <result property="gId" column="g_id"/>
+        <result property="uId" column="u_id"/>
+        <result property="gcIsGood" column="gc_is_good"/>
+        <result property="gcTime" column="gc_time"/>
+    </resultMap>
+
+    <resultMap id="InventoryMap" type="Inventory">
+        <id property="iId" column="i_id"/>
+        <result property="uId" column="u_id"/>
+        <result property="gId" column="g_id"/>
+        <result property="buyTime" column="buy_time"/>
+    </resultMap>
+
+    <resultMap id="UserMap1" type="User">
+        <id property="uId" column="u_id"/>
+        <result property="uName" column="u_name"/>
+        <association property="comment" resultMap="CommentMap1"/>
+    </resultMap>
+
+    <resultMap id="UserSessionMap" type="UserSession">
+        <id property="sId" column="s_id"/>
+        <result property="uId" column="u_id"/>
+        <result property="uName" column="u_name"/>
+        <result property="uBalance" column="u_balance"/>
+        <result property="uPassword" column="u_password"/>
+    </resultMap>
+
+    <insert id="insertUser">
+        INSERT INTO
+            t_user
+        VALUES
+            (null,#{uName},#{uPassword},null,#{uCountry},#{uEmail},0)
+    </insert>
+    <insert id="addGameToCart">
+        INSERT INTO
+            t_cart
+        VALUES
+            (null,#{param1},#{param2},null)
+    </insert>
+    <insert id="insertGameToInventoryWithUserIdAndGameId">
+        INSERT INTO
+            t_inventory
+        VALUES
+            (null,#{param1},#{param2},null)
+    </insert>
+    <insert id="insertGameCommentWithComment">
+        INSERT INTO
+            t_game_comment
+        VALUES
+            (null,#{gcContent},#{gcIsGood},#{uId},#{gId},null)
+    </insert>
+
+    <insert id="insertFriend">
+        INSERT INTO
+            t_friend
+        VALUES
+            (null ,#{param1},#{param2},0)
+    </insert>
+    <insert id="insertFriendWithIsPass">
+        INSERT INTO
+            t_friend
+        VALUES
+            (null ,#{param1},#{param2},1)
+    </insert>
+
+    <update id="updateUserBalanceWithBalance">
+        UPDATE t_user SET u_balance = #{param2} WHERE u_id = #{param1}
+    </update>
+    <update id="updateUserSessionWithUser">
+        UPDATE t_session SET u_id= #{uId},u_name = #{uName},u_balance = #{uBalance},u_password = #{uPassword}
+    </update>
+
+    <update id="updateFriendIsPass">
+        UPDATE t_friend SET is_pass = 1 WHERE u_id = #{param1} AND ano_id = #{param2}
+    </update>
+
+    <delete id="deleteGameFromCartByGameIdAndUserId">
+        DELETE FROM t_cart WHERE g_id = #{param1} AND u_id = #{param2}
+    </delete>
+
+    <delete id="deleteFriendReq">
+        DELETE FROM t_friend WHERE u_id = #{param1} AND ano_id = #{param2}
+    </delete>
+
+    <select id="selectUserByNameAndPassword" resultMap="UserMap">
+        SELECT
+            u_id,u_name,u_password,u_creat_time,u_country,u_email,u_balance
+        FROM
+            t_user
+        WHERE
+            u_name = #{param1} AND u_password = #{param2}
+    </select>
+    <select id="selectCartByUserId" resultMap="CartMap">
+        SELECT
+            car_id, c.u_id, creat_time,g.g_id, g_name, g_price
+        FROM
+            t_Cart c left join t_game g on c.g_id = g.g_id
+        WHERE
+            c.u_id = #{uId};
+    </select>
+    <select id="selectGameByGameIdAndUserIdFromCart" resultMap="CartMap">
+        SELECT
+            car_id, u_id, g_id
+        FROM
+            t_Cart
+        WHERE
+            g_id = #{param1} AND u_id = #{param2}
+    </select>
+
+    <select id="selectInventoryByUserId" resultMap="GameMap">
+        SELECT
+            buy_time,g.g_id,g.g_name
+        FROM
+            t_inventory i LEFT JOIN t_game g ON i.g_id = g.g_id
+        WHERE
+            u_id = #{uId}
+    </select>
+
+    <select id="selectCommentByGameId" resultMap="UserMap">
+        SELECT
+            u.u_id, u.u_name, gc_content, gc_is_good, gc_time
+        FROM
+            t_user u LEFT JOIN t_game_comment c ON c.u_id = u.u_id
+        WHERE
+            g_id = #{gId}
+    </select>
+
+    <select id="selectBalanceByUserId" resultType="java.lang.Integer">
+        SELECT
+            u_balance
+        FROM
+            t_user
+        WHERE
+            u_id = #{uId}
+    </select>
+    <select id="selectUserSession" resultMap="UserSessionMap">
+        SELECT
+            s_id,u_id,u_name,u_balance,u_password
+        FROM
+            t_session
+    </select>
+    <select id="selectAllFriends" resultMap="UserMap">
+        SELECT
+            u.u_id, u.u_name
+        FROM
+            t_user u LEFT JOIN t_friend f ON u.u_id = f.ano_id
+        WHERE
+            f.u_id = #{uId} AND f.is_pass = 1
+    </select>
+
+    <select id="selectUserByName" resultMap="UserMap">
+        SELECT
+            u_id, u_name,u_password,u_balance
+        FROM
+            t_user
+        WHERE
+            u_name = #{uName}
+    </select>
+    <select id="selectWaitForPassingByUserId" resultMap="UserMap">
+        SELECT
+            u.u_id, u.u_name
+        FROM
+            t_user u LEFT JOIN t_friend f ON u.u_id = f.ano_id
+        WHERE
+            f.u_id = #{uId} AND f.is_pass = 0
+    </select>
+
+    <select id="selectUserEmailByPId" resultType="java.lang.String">
+        SELECT
+            u.u_email
+        FROM
+            t_user u LEFT JOIN t_publisher p ON u.u_id = p.u_id
+        WHERE
+            p.p_id = #{pId}
+    </select>
+    <select id="selectUserEmailByGId" resultType="java.lang.String">
+        SELECT
+            u_email
+        FROM
+            t_game g
+                LEFT JOIN t_publisher p ON g.p_id = p.p_id
+                LEFT JOIN t_user u ON u.u_id = p.u_id
+        WHERE g_id = #{gId};
+    </select>
+    <select id="selectFriendIdByFId" resultType="java.lang.Integer">
+        SELECT
+               f_id
+        FROM
+            t_friend
+        WHERE
+            u_id = #{param1} AND ano_id = #{param2}
+    </select>
+    <select id="selectUserByEmail" resultType="java.lang.String">
+        SELECT
+                u_email
+        FROM
+                t_user
+        WHERE
+                u_email = #{uEmail}
+    </select>
+
+</mapper>

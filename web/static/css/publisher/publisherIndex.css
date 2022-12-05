@@ -1,0 +1,22 @@
+body{
+    background-image: url("/static/img/user/acct_creation_bg.jpg");
+    background-size: cover;
+}
+
+table{
+    text-align: center;
+    border-color: aliceblue;
+}
+
+th{
+    text-align: center;
+    color: aliceblue;
+}
+td{
+    color: aliceblue;
+    background-color: #2E9AFE;
+}
+
+h2{
+    color: aliceblue;
+}
