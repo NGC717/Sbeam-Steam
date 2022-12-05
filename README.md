@@ -1,26 +1,27 @@
+Project Name：Sbeam Game Store
 
-项目名称：sbeam游戏商城 - 模仿steam商城
+Framework：mybatis + spring + spring mvc
 
-项目使用框架：mybatis + spring + spring mvc
+database：mysql + redis
 
-使用的数据库：mysql + redis
+chat：websocket
 
-聊天实现方式：websocket
+How to use:
 
-1.修改src下的data.properties中的PROJECT_PATH值，其余各项均无需修改
+1.Modify the PROJECT_PATH value in data.properties under src, and the rest of the items do not need to be modified
 
-2.修改com/sbeam/util/Resources.java工具类中的第50行，将路径替换为项目中的data.properties绝对路径
-本来想写成相对路径读取的，结果死活不好使，只能这样了，我淦！
+2.Modify line 50 in the com/sbeam/util/Resources.java utility class to replace the path with the absolute path to data.properties in the project
 
-3.使用支付宝沙箱需要修改com/sbeam/util/AlipayConfig.java中的return_url值，项目中我用的是内网穿透地址
+3.To use the Alipay sandbox, I need to modify the return_url value in the com/sbeam/util/AlipayConfig.java, and I used the intranet penetration address in the project
 
-4.这个项目中有两个后台管理，一个是游戏发行商管理后台，另一个是sbeam官方管理后台（只能通过地址栏输入地址访问，请求地址为：http://127.0.0.1：8080/root/login）
-    4.1 游戏发行商管理需点击 "合作"，填所需信息,进行申请
-    4.2 sbeam后台则负责进行游戏发行商合作申请审核，以及发行游戏审核，通过申请才可以在sbeam发行游戏
-    4.3 当游戏发行商的申请（发行游戏审核，申请在sbeam发行游戏）通过或不通过时，会发送邮件通知
-    4.4 登录sbeam管理后台需要使用管理员密码登录，密码保存在数据库中的t_root表中
+4.There are two backstage management in this project, one is the game publisher management backend, and the other is the official management background of sbeam (can only be accessed by entering the address in the address bar, the request address is: http://127.0.0.1:8080/root/login)
 
-5.若在运行过程中，出现类似于 “查找一个值，但却找到多个值” 的报错，大概率是数据库中的数据有些值重复了，把重复的修改或删掉就可以了
-自己在测试的时候没严格插数据或由于程序出错，导致插入数据可能有部分重复，但我实在是懒得改了。。。
-（只要程序能成功完成预期功能，能不改就不改.jpg）
+    4.1 Game publisher management needs to click "Cooperation", fill in the required information, and apply
 
+    4.2 The Sbeam backend is responsible for reviewing game publisher cooperation applications and publishing game reviews, and only through the application can games be released on Sbeam
+
+    4.3 An email notification is sent when the game publisher's application (release game review, application to release the game on Sbeam) is approved or not
+
+    4.4 To log in to the sbeam admin background, you need to log in with an administrator password, which is saved in the t_root table in the database
+
+5.If an error similar to "looking for a value, but finding multiple values" occurs during operation, the probability is that some values of the data in the database are duplicated, and the duplicate can be modified or deleted.I didn't insert data strictly when testing or due to program errors, the inserted data may be partially duplicated, but I was too lazy to change it :)
